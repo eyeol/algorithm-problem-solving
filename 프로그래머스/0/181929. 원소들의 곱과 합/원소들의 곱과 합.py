@@ -1,11 +1,9 @@
 def solution(num_list):
     
-    sum_mul = 1
-    
+    num_mul = 1
     for num in num_list:
-        sum_mul *= num
+        num_mul *= num
     
-    if sum_mul < sum(num_list)**2:
-        return 1
+    return int(num_mul < sum(num_list)**2)
     
-    return 0
+    
