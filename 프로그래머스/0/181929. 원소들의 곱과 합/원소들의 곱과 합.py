@@ -9,4 +9,3 @@ def solution(num_list):
         return 1
     
     return 0
-
