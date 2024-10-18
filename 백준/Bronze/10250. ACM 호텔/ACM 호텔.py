@@ -1,16 +1,12 @@
 T = int(input())
 
-for i in range(T):
+for _ in range(T):
     h, w, n = map(int, input().split())
 
-    # 손님이 머무를 층수
-    h_index = n % h
+    # 층수
+    floor = h if n % h == 0 else n % h
 
-    # 딱 맞아떨어지면 0층이 아니라 h층
-    if h_index == 0:
-        h_index = h
-        w_index = n // h
-    else:
-        w_index = n // h + 1
+    # 방 번호
+    room = (n - 1) // h + 1
 
-    print(f"{h_index}{w_index:02}")
+    print(f"{floor}{room:02}")
