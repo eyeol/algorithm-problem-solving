@@ -1,1 +1,3 @@
-# algorithm-problem-solving
+# Problem Solving
+
+<img src=".github/images/all.jpg" >
