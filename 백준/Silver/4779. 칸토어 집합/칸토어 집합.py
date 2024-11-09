@@ -1,4 +1,4 @@
-def divide_and_remove(start, end):
+def divide_and_remove(kant, start, end):
     if (end - start) == 1:
         return
     else:
@@ -9,19 +9,24 @@ def divide_and_remove(start, end):
         for i in range(checkpoint_1, checkpoint_2):
             kant[i] = " "
 
-        divide_and_remove(start, checkpoint_1)
-        divide_and_remove(checkpoint_2, end)
+        divide_and_remove(kant, start, checkpoint_1)
+        divide_and_remove(kant, checkpoint_2, end)
 
 
 import sys
 
-for line in sys.stdin:
-    N = int(line.strip())
-    kant = ["-"] * (3**N)
-    start = 0
-    end = len(kant)
 
-    divide_and_remove(start, end)
+def sol():
+    for line in sys.stdin:
+        N = int(line.strip())
+        kant = ["-"] * (3**N)
+        start = 0
+        end = len(kant)
 
-    result = "".join(kant)
-    print(result)
+        divide_and_remove(kant, start, end)
+
+        result = "".join(kant)
+        print(result)
+
+
+sol()
