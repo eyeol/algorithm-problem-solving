@@ -15,4 +15,3 @@ for _ in range(N):
             print(y)
     else:
         heapq.heappush(heap, x)
-    # heapq.heappush(heap, int(input()))
