@@ -1,55 +1,53 @@
 import sys
-from collections import deque
-
 input = sys.stdin.readline
 
-dfs_result = []
-bfs_result = []
+def dfs(graph, visited, now, result):
+    visited[now] = True
+    result.append(str(now))
 
+    for neighbor in graph[now]:
+        if not visited[neighbor]:
+            dfs(graph, visited, neighbor, result)
 
-def dfs(node: int):
-    if visited[node]:
-        return
+def bfs(graph, start):
+    visited = [False] * len(graph)
+    queue = [start]
+    visited[start] = True
+    l, r = 0, 1
+    result = []
 
-    visited[node] = 1
-    dfs_result.append(node)
-    for i in adj[node]:
-        dfs(i)
+    while l < r:
+        node = queue[l]
+        l += 1
+        result.append(str(node))
+        for neighbor in graph[node]:
+            if not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)
+                r += 1
 
-
-def bfs(node: int):
-    deq = deque([node])
-
-    while deq:
-        out = deq.popleft()
-        if not visited[out]:
-            visited[out] = 1
-            bfs_result.append(out)
-            for i in adj[out]:
-                if not visited[i]:
-                    deq.append(i)
-
+    return result
 
 def solution():
     N, M, V = map(int, input().split())
-    global adj
-    adj = [[] for _ in range(N + 1)]
+    graph = [[] for _ in range(N + 1)]
 
-    global visited
-    visited = [0] * (N + 1)
     for _ in range(M):
-        i, j = map(int, input().split())
-        # undirected graph
-        adj[i].append(j)
-        adj[j].append(i)
-    for i in range(1, N + 1):
-        adj[i].sort()
+        u, v = map(int, input().split())
+        graph[u].append(v)
+        graph[v].append(u)
 
-    dfs(V)
-    visited = [0] * (N + 1)
-    bfs(V)
-    print(" ".join(map(str, dfs_result)))
-    print(" ".join(map(str, bfs_result)))
+    for edges in graph:
+        edges.sort()
 
+    visited = [False] * (N + 1)
+    dfs_result = []
+    dfs(graph, visited, V, dfs_result)
+    print(" ".join(dfs_result))
+
+    # 🔧 visited 재초기화 필요!
+    visited = [False] * (N + 1)
+    bfs_result = bfs(graph, V)
+    print(" ".join(bfs_result))
 
 solution()
