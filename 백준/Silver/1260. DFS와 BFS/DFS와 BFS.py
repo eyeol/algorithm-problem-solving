@@ -45,7 +45,6 @@ def solution():
     dfs(graph, visited, V, dfs_result)
     print(" ".join(dfs_result))
 
-    # 🔧 visited 재초기화 필요!
     visited = [False] * (N + 1)
     bfs_result = bfs(graph, V)
     print(" ".join(bfs_result))
