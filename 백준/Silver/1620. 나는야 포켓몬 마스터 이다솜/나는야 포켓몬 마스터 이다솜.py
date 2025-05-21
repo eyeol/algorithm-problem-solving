@@ -5,14 +5,21 @@ input = sys.stdin.readline
 
 def solution():
     N, M = map(int, input().split())
-    pokedex = [input().strip() for _ in range(N)]
+
+    pokedex_num = {}
+    pokedex_pok = {}
+
+    for i in range(1, N + 1):
+        pokemon = input().strip()
+        pokedex_num[i] = pokemon
+        pokedex_pok[pokemon] = i
 
     for _ in range(M):
         pokemon = input().strip()
         if pokemon.isdigit():
-            print(pokedex[int(pokemon) - 1])
+            print(pokedex_num[int(pokemon)])
         else:
-            print(pokedex.index(pokemon) + 1)
+            print(pokedex_pok[pokemon])
 
 
 solution()
