@@ -8,14 +8,9 @@ def solution():
     coins = [int(input()) for _ in range(N)]
 
     count = 0
-    opt = 0
-    while K > 0:
-        for coin in reversed(coins):
-            if coin <= K:
-                opt = coin
-                break
-        count += K // opt
-        K = K % opt
+    for coin in reversed(coins):
+        count += K // coin
+        K = K % coin
 
     print(count)
 
