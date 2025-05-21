@@ -8,7 +8,7 @@ def solution():
     coins = [int(input()) for _ in range(N)]
 
     count = 0
-    for coin in reversed(coins):
+    for coin in coins[::-1]:
         count += K // coin
         K = K % coin
 
