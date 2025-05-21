@@ -6,12 +6,12 @@ input = sys.stdin.readline
 def solution():
     N, M = map(int, input().split())
 
-    pokedex_num = {}
+    pokedex_num = [0]
     pokedex_pok = {}
 
     for i in range(1, N + 1):
         pokemon = input().strip()
-        pokedex_num[i] = pokemon
+        pokedex_num.append(pokemon)
         pokedex_pok[pokemon] = i
 
     for _ in range(M):
