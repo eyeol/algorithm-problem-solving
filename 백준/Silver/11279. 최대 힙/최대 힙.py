@@ -14,8 +14,7 @@ def solution():
             heapq.heappush(heap, -x)
         else:
             if heap:
-                result = -heapq.heappop(heap)
-                print(result)
+                print(-heapq.heappop(heap))
             else:
                 print(0)
 
