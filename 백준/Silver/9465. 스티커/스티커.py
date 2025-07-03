@@ -16,9 +16,6 @@ def solution():
         dp[0][0], dp[1][0] = stickers[0][0], stickers[1][0]
         dp[0][1], dp[1][1] = dp[1][0] + stickers[0][1], dp[0][0] + stickers[1][1]
 
-        if N == 2:
-            print(max(dp[0][0], dp[0][1], dp[1][0], dp[1][1]))
-            continue
 
         for i in range(2, N):  # 2 to N-1
             candi1 = dp[0][i - 1] + stickers[1][i]
