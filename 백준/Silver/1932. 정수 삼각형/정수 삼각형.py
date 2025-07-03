@@ -5,30 +5,20 @@ input = sys.stdin.readline
 
 def solution():
     N = int(input())
-    triangle = [0]
-    for _ in range(N):
-        triangle = triangle + list(map(int, input().split()))
-    numbers = N * (N + 1) // 2
-    dp = [0] * (numbers + 1)
-    dp[1] = triangle[1]
-    pivot = 2
-    count = pivot
-    for i in range(2, numbers + 1):
-        if count == 0:
-            pivot += 1
-            count = pivot
+    tri = [list(map(int, input().split())) for _ in range(N)]
 
-        left = pivot - 1
-        right = pivot
+    dp = tri[0][:]
 
-        if count == pivot:
-            dp[i] = dp[i - left] + triangle[i]
-        elif count == 1:
-            dp[i] = dp[i - right] + triangle[i]
-        else:
-            dp[i] = max(dp[i - left], dp[i - right]) + triangle[i]
+    for i in range(1, N):
+        nxt = [0] * (i + 1)
 
-        count -= 1
+        nxt[0] = dp[0] + tri[i][0]
+        nxt[-1] = dp[-1] + tri[i][i]
+
+        for j in range(1, i):
+            nxt[j] = max(dp[j - 1], dp[j]) + tri[i][j]
+
+        dp = nxt
 
     print(max(dp))
 
