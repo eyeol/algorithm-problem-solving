@@ -3,43 +3,24 @@ import sys
 input = sys.stdin.readline
 
 
-def FindMaxCrossingSubarray(A, low, mid, high):
-    left_sum = A[mid]
-    sum = A[mid]
-    left_end = mid
-    for i in range(mid - 1, low - 1, -1):  # low까지 내려감
-        sum += A[i]
-        if sum > left_sum:
-            left_sum = sum
-            left_end = i
+def kadane(arr):
+    best = curr = arr[0]
+    best_start = best_end = 0
+    temp_start = 0
 
-    right_sum = A[mid + 1]
-    sum = A[mid + 1]
-    right_end = mid + 1
-    for i in range(mid + 2, high + 1):  # high까지 올라감
-        sum += A[i]
-        if sum > right_sum:
-            right_sum = sum
-            right_end = i
-
-    return left_end, right_end, left_sum + right_sum
-
-
-def FindMaxSubarray(A, low, high):
-    if low == high:
-        return low, high, A[low]
-
-    else:
-        mid = (low + high) // 2
-        left_low, left_high, left_max = FindMaxSubarray(A, low, mid)
-        right_low, right_high, right_max = FindMaxSubarray(A, mid + 1, high)
-        cross_low, cross_high, cross_max = FindMaxCrossingSubarray(A, low, mid, high)
-        if left_max >= right_max and left_max >= cross_max:
-            return left_low, left_high, left_max
-        elif right_max >= left_max and right_max >= cross_max:
-            return right_low, right_high, right_max
+    for i in range(1, len(arr)):
+        if curr + arr[i] < arr[i]:
+            curr = arr[i]
+            temp_start = i
         else:
-            return cross_low, cross_high, cross_max
+            curr += arr[i]
+
+        if curr > best:
+            best = curr
+            best_start = temp_start
+            best_end = i
+
+    return best_start, best_end, best
 
 
 def solution():
@@ -48,7 +29,8 @@ def solution():
     for _ in range(T):
         N = int(input())
         array = list(map(int, input().split()))
-        le, ri, maximum = FindMaxSubarray(array, 0, N - 1)
+        _, _, maximum = kadane(array)
+
         print(maximum)
 
 
