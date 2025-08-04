@@ -4,41 +4,20 @@ input = sys.stdin.readline
 
 
 def Cut(paper, r, c, size, record):
-    # Base Case
-    if size == 1:
-        if paper[r][c] == 0:
-            record[0] += 1
-            return
-        else:
-            record[1] += 1
-            return
-
     first = paper[r][c]
-    same = True
 
     for i in range(r, r + size):
         row = paper[i]
         for j in range(c, c + size):
             if row[j] != first:
-                same = False
-                break
-        if same is False:
-            break
-    if same is True:
-        if first == 0:
-            record[0] += 1
-            return
-        else:
-            record[1] += 1
-            return
+                h = size // 2
+                Cut(paper, r, c, h, record)
+                Cut(paper, r, c + h, h, record)
+                Cut(paper, r + h, c, h, record)
+                Cut(paper, r + h, c + h, h, record)
+                return
 
-    h = size // 2
-    Cut(paper, r, c, h, record)
-    Cut(paper, r, c + h, h, record)
-    Cut(paper, r + h, c, h, record)
-    Cut(paper, r + h, c + h, h, record)
-
-    return
+    record[first] += 1
 
 
 def solution():
