@@ -2,35 +2,54 @@ import sys
 
 input = sys.stdin.readline
 
-N = int(input())
 
-board = [list(map(int, input().split())) for _ in range(N)]
+def Cut(paper, r, c, size, record):
+    # Base Case
+    if size == 1:
+        if paper[r][c] == 0:
+            record[0] += 1
+            return
+        else:
+            record[1] += 1
+            return
 
-blue = 0
-white = 0
+    first = paper[r][c]
+    same = True
 
+    for i in range(r, r + size):
+        row = paper[i]
+        for j in range(c, c + size):
+            if row[j] != first:
+                same = False
+                break
+        if same is False:
+            break
+    if same is True:
+        if first == 0:
+            record[0] += 1
+            return
+        else:
+            record[1] += 1
+            return
 
-def dfs(x, y, size):
-    global blue, white
-    whole = size**2
-    count = 0
-    count += sum(sum(row[y : y + size]) for row in board[x : x + size])
-    if whole == count:
-        blue += 1
-    elif count == 0:
-        white += 1
-    else:
-        dfs(x, y, size // 2)
-        if (x + size // 2) in range(N) and (y + size // 2) in range(N):
-            dfs(x, y + size // 2, size // 2)
-            dfs(x + size // 2, y, size // 2)
-            dfs(x + size // 2, y + size // 2, size // 2)
+    h = size // 2
+    Cut(paper, r, c, h, record)
+    Cut(paper, r, c + h, h, record)
+    Cut(paper, r + h, c, h, record)
+    Cut(paper, r + h, c + h, h, record)
+
+    return
 
 
 def solution():
-    dfs(0, 0, N)
-    print(white)
-    print(blue)
+    N = int(input())
+    paper = [list(map(int, input().split())) for _ in range(N)]
+    record = [0, 0]
+    Cut(paper, 0, 0, N, record)
+
+    print(record[0])
+    print(record[1])
 
 
-solution()
+if __name__ == "__main__":
+    solution()
