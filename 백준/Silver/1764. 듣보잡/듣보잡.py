@@ -1,19 +1,24 @@
-# N : 듣도 보도 못한 사람 수
-# M : 보도 못한 사람 수
+import sys
 
-N, M = map(int, input().split())
+input = sys.stdin.readline
 
-not_heard_saw = set()
-not_saw = set()
-for _ in range(N):
-    not_heard_saw.add(input())
 
-for _ in range(M):
-    not_saw.add(input())
+def solution():
+    N, M = map(int, input().split())
+    never_heard = {input().strip() for _ in range(N)}
 
-# 사전순 출력을 위한 sorting 잊지말자
-not_heard_saw = sorted(not_heard_saw.intersection(not_saw))
+    both = []
+    for _ in range(M):
+        person = input().strip()
+        if person in never_heard:
+            both.append(person)
 
-print(len(not_heard_saw))
-for person in not_heard_saw:
-    print(person)
+    both.sort()
+
+    print(len(both))
+    for person in both:
+        print(person)
+
+
+if __name__ == "__main__":
+    solution()
