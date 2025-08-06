@@ -1,20 +1,29 @@
 import sys
-import re
 
 input = sys.stdin.readline
+
+# Given
+# Mathemathical Expression
+
+# Goal
+# maximize result
 
 
 def solution():
     expr = input().strip()
+    groups = expr.split("-")
 
-    parts = expr.split("-")
+    results = []
+    for g in groups:
+        results.append(sum(map(int, g.split("+"))))
 
-    result = sum(map(int, parts[0].split("+")))
+    result = results[0]
 
-    for part in parts[1:]:
-        result -= sum(map(int, part.split("+")))
+    for i in range(1, len(results)):
+        result -= results[i]
 
     print(result)
 
 
-solution()
+if __name__ == "__main__":
+    solution()
