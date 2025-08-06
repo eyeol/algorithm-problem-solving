@@ -6,18 +6,12 @@ input = sys.stdin.readline
 def solution():
     N, M = map(int, input().split())
     never_heard = {input().strip() for _ in range(N)}
+    never_seen = {input().strip() for _ in range(M)}
 
-    both = []
-    for _ in range(M):
-        person = input().strip()
-        if person in never_heard:
-            both.append(person)
-
-    both.sort()
+    both = sorted(never_heard & never_seen)
 
     print(len(both))
-    for person in both:
-        print(person)
+    print("\n".join(both))
 
 
 if __name__ == "__main__":
