@@ -1,14 +1,22 @@
-N = int(input())
+import sys
 
-words = []
-for i in range(N):
-    word = input()
-    words.append(word)
+input = sys.stdin.readline
 
-words = list(set(words))
 
-# lambda 문법 정확하게 공부하기!!
-sorted_words = sorted(words, key=lambda x: (len(x), x))
+def solution():
+    N = int(input())
+    words = []
 
-for word in sorted_words:
-    print(word)
+    for _ in range(N):
+        word = input().strip()
+        words.append((word, len(word)))
+
+    words = list(set(words))
+    words.sort(key=lambda x: (x[1], x[0]))
+
+    for word in words:
+        print(word[0])
+
+
+if __name__ == "__main__":
+    solution()
