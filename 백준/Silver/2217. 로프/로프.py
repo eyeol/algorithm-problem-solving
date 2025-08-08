@@ -25,18 +25,15 @@ input = sys.stdin.readline
 def solution():
     N = int(input().strip())
 
-    rope_info = []
-    for _ in range(N):
-        rope_info.append(int(input().strip()))
+    rope_info = [int(input()) for _ in range(N)]
 
-    rope_num = len(rope_info)
     rope_info.sort()
 
     maximized_weight = 0
     # 모든 경우를 다 서치해야 한다
-    for i in range(rope_num):
-        if rope_info[i] * (rope_num - i) > maximized_weight:
-            maximized_weight = rope_info[i] * (rope_num - i)
+    for i in range(N):
+        if rope_info[i] * (N - i) > maximized_weight:
+            maximized_weight = rope_info[i] * (N - i)
 
     print(maximized_weight)
 
