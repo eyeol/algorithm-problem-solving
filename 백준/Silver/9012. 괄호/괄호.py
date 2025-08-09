@@ -1,27 +1,39 @@
-T = int(input())
+import sys
+
+input = sys.stdin.readline
+
+# Given
+# Valid PS 정보
+
+# Goal
+# 주어진 문자열에 대해 VPS인지 아닌지 determine
+
+# How to solve
+# 이건 스택/큐/힙 문제인데 어떤걸 사용해야 하는지 생각해보자
 
 
-for i in range(T):
-
-    PS = input().strip()
-
-    valid = True
-    up_down = 0
-
-    for char in PS:
-        # 중간에 음수가 되면 그 즉시 invalid로 판단
-        if up_down < 0:
-            valid = False
-            break
-        if char == "(":
-            up_down += 1
+def determine(ps: str):
+    cnt = 0
+    for ch in ps:
+        if ch == "(":
+            cnt += 1
         else:
-            up_down -= 1
+            cnt -= 1
+        if cnt < 0:
+            return "NO"
+    if cnt != 0:
+        return "NO"
+    return "YES"
 
-    if up_down != 0:
-        valid = False
 
-    if valid:
-        print("YES")
-    else:
-        print("NO")
+def solution():
+    T = int(input())
+
+    for _ in range(T):
+        ps = input().strip()
+
+        print(determine(ps))
+
+
+if __name__ == "__main__":
+    solution()
