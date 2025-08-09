@@ -2,30 +2,49 @@ import sys
 
 input = sys.stdin.readline
 
-K, N = map(int, input().split())
-lan_list = [int(input()) for _ in range(K)]
+# Given
+# 영식이는 자체적으로 K개의 랜선을 갖고 있음(길이는 제각각)
 
-maximum = sum(lan_list) // N
+# Goal
+# 같은 길이인, N개의 랜선을 만들어야 함
 
-# sum이 N보다 작거나 같음 : 더 나아갈 수 있음
-# sum이 N보다 커짐 : 뒤로 반
+# How to solve
+# 기존 K개의 랜선 중 최소 길이보다 짧거나 같아야 한다
+# 어떤 길이를 지정했을 때, 버리는게 생길 수 있음
 
-
-def sol():
-    result = 0
-    start = 1
-    end = maximum
-    while end >= start:
-        target = (start + end) // 2
-        # print(start, end, target)
-        summation = sum(lan // target for lan in lan_list)
-        if summation < N:
-            end = target - 1
-        elif summation >= N:
-            result = target
-            start = target + 1
-
-    print(result)
+# 랜선 길이를 d라고 하자
+# 만들 수 있는 랜선 갯수는 d에 대한 단조 함수임
+# 그래서 d에 대한 파라매트릭 서치라고 볼 수 있음
 
 
-sol()
+def ok(wires: list, d: int, N):
+    cnt = 0
+    for w in wires:
+        cnt += w // d
+        if cnt >= N:
+            return True
+
+    if cnt < N:
+        return False
+
+
+def solution():
+    K, N = map(int, input().split())
+    wires = [int(input()) for _ in range(K)]
+
+    lo, hi = 1, max(wires)
+    ans = 0
+
+    while lo <= hi:
+        d = (lo + hi) // 2
+        if ok(wires, d, N):
+            ans = d
+            lo = d + 1
+        else:
+            hi = d - 1
+
+    print(ans)
+
+
+if __name__ == "__main__":
+    solution()
