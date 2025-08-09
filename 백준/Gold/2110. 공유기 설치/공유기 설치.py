@@ -2,26 +2,17 @@ import sys
 
 input = sys.stdin.readline
 
-def safe(houses: list, d: int, C: int):
-    curr = 0
+def safe(houses: list, d: int, C: int) -> bool:
     count = 1
-
-    next = 1
-    while next < len(houses):  
-        if houses[next] - houses[curr] >= d:
-            
-            curr = next
+    last = houses[0]
+    n = len(houses)
+    for i in range(1, n):              
+        if houses[i] - last >= d:
             count += 1
-            next += 1
-        else:  
-            next += 1
-        if count >= C:
-            break
-
-    if count < C:
-        return False
-
-    return True
+            last = houses[i]
+            if count >= C:             
+                return True
+    return False
 
 
 def solution():
@@ -31,19 +22,17 @@ def solution():
         houses.append(int(input()))
     houses.sort()
 
-    lo, hi = 0, houses[-1] - houses[0]
+  
+    lo, hi = 1, houses[-1] - houses[0]  # 최소 간격은 1부터
     ans = 0
-
     while lo <= hi:
         d = (lo + hi) // 2
-
         if safe(houses, d, C):
             ans = d
             lo = d + 1
         else:
             hi = d - 1
-
-    print(ans)
+    print(ans) 
 
 
 if __name__ == "__main__":
