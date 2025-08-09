@@ -2,32 +2,35 @@ import sys
 
 input = sys.stdin.readline
 
-N, M = map(int, input().split())
-trees = list(map(int, input().split()))
+MAX_HEIGHT = 1_000_000_000
 
 
-def search_height(l, r):
-    target_height = 0
-
-    while l <= r:
-        h = (l + r) // 2
-        wood_cutted = sum(tree - h if tree > h else 0 for tree in trees)
-
-        if wood_cutted >= M:
-            target_height = h
-            l = h + 1
-        else:
-            r = h - 1
-
-    return target_height
+# O(N); N이 100만이라 괜찮음
+def get_wood(trees: list, height: int):
+    s = 0
+    for tree in trees:
+        if tree > height:
+            s += tree - height
+    return s
 
 
 def solution():
+    N, M = map(int, input().split())
+    trees = list(map(int, input().split()))
 
-    minimum = 0
-    maximum = max(trees)
-    result = search_height(minimum, maximum)
-    print(result)
+    lo, hi = 0, MAX_HEIGHT
+    ans = 0
+
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if get_wood(trees, mid) >= M:
+            ans = mid
+            lo = mid + 1
+        else:
+            hi = mid - 1
+
+    print(ans)
 
 
-solution()
+if __name__ == "__main__":
+    solution()
