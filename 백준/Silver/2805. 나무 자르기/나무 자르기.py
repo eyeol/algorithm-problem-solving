@@ -2,28 +2,24 @@ import sys
 
 input = sys.stdin.readline
 
-MAX_HEIGHT = 1_000_000_000
-
-
-# O(N); N이 100만이라 괜찮음
-def get_wood(trees: list, height: int):
-    s = 0
-    for tree in trees:
-        if tree > height:
-            s += tree - height
-    return s
-
 
 def solution():
     N, M = map(int, input().split())
     trees = list(map(int, input().split()))
 
-    lo, hi = 0, MAX_HEIGHT
+    lo, hi = 0, max(trees)
     ans = 0
 
     while lo <= hi:
+        # H 역할
         mid = (lo + hi) // 2
-        if get_wood(trees, mid) >= M:
+        s = 0
+        for t in trees:
+            if t > mid:
+                s += t - mid
+                if s >= M:
+                    break
+        if s >= M:
             ans = mid
             lo = mid + 1
         else:
