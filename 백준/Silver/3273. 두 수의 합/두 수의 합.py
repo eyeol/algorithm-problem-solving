@@ -28,17 +28,12 @@ def solution():
     cnt = 0
 
     while l < r:
-        left = arr[l]
-        right = arr[r]
-
-        sum = left + right
+        sum = arr[l] + arr[r]
 
         if sum == X:
             cnt += 1
-            if arr[l + 1] == arr[l]:
-                l += 1
-            else:
-                r -= 1
+            l += 1
+            r -= 1
         elif sum < X:
             l += 1
         else:  # sum > X
