@@ -3,67 +3,94 @@ from collections import deque
 
 input = sys.stdin.readline
 
-# Given
-# 보물섬 지도는 2차원 행렬 형태
-# 지도의 각 칸은 육지(L)나 바다(W)로 표시
-# 상하좌우 이웃한 육지로만 이동 가능
-# 한 칸 이동하는데 한 시간
-# 보물은 서로 최단 거리로 이동하는데 있어
-# 가장 긴 시간이 걸리는 육지 두 곳에 나뉘어 묻힘
-# 육지를 나타내는 두 곳 사이 최단 거리 이동하려면, 같은 곳 두번 이상 지나거나 멀리 돌아가면 안됨
-
-# Goal
-# 보물이 묻힌 두 곳의 최단 거리로 이동하는 시간을 구하고 싶음
-
-# How to solve
-# 보물 묻힌 두 곳을 어떻게 특정하지?
-# 최단 거리로 가도 가장 오래 걸리는 곳
-# 그런데 도달 가능해야 함
-# visited  활용해서 최대 시간 체크
-
 DX = [-1, 1, 0, 0]
 DY = [0, 0, -1, 1]
 
+def build_components(maps, H, W):
+    comp = [[-1] * W for _ in range(H)]
+    comps = []             # 각 컴포넌트의 경계 L 리스트
+    sizes = []             # 각 컴포넌트 크기
+    cid = 0
 
-def bfs(maps: list, h: int, w: int, sx: int, sy: int):
-    dist = [[-1] * w for _ in range(h)]
-    deq = deque([(sx, sy)])
+    for i in range(H):
+        for j in range(W):
+            if maps[i][j] == 'L' and comp[i][j] == -1:
+                q = deque([(i, j)])
+                comp[i][j] = cid
+                boundary = []
+                size = 0
 
+                while q:
+                    x, y = q.popleft()
+                    size += 1
+                    is_boundary = False
+
+                    for k in range(4):
+                        nx, ny = x + DX[k], y + DY[k]
+                        if not (0 <= nx < H and 0 <= ny < W) or maps[nx][ny] == 'W':
+                            is_boundary = True
+                        else:
+                            if comp[nx][ny] == -1 and maps[nx][ny] == 'L':
+                                comp[nx][ny] = cid
+                                q.append((nx, ny))
+
+                    if is_boundary:
+                        boundary.append((x, y))
+
+                comps.append(boundary)
+                sizes.append(size)
+                cid += 1
+
+    return comp, comps, sizes
+
+def bfs_farthest_from(start, cid, maps, H, W, comp, seen, dist, tag):
+    tag += 1
+    sx, sy = start
+    q = deque([(sx, sy)])
+    seen[sx][sy] = tag
     dist[sx][sy] = 0
     far = 0
 
-    while deq:
-        x, y = deq.popleft()
+    while q:
+        x, y = q.popleft()
         d = dist[x][y]
         if d > far:
             far = d
-        for i in range(4):
-            nx, ny = x + DX[i], y + DY[i]
-            if (
-                0 <= nx < h
-                and 0 <= ny < w
-                and maps[nx][ny] == "L"
-                and dist[nx][ny] == -1
-            ):
-                dist[nx][ny] = d + 1
-                deq.append((nx, ny))
+        for k in range(4):
+            nx, ny = x + DX[k], y + DY[k]
+            if 0 <= nx < H and 0 <= ny < W and maps[nx][ny] == 'L':
+                if comp[nx][ny] == cid and seen[nx][ny] != tag:
+                    seen[nx][ny] = tag
+                    dist[nx][ny] = d + 1
+                    q.append((nx, ny))
 
-    return far
-
+    return far, tag
 
 def solution():
-    h, w = map(int, input().split())
-    maps = [input().strip() for _ in range(h)]
+    H, W = map(int, input().split())
+    maps = [input().strip() for _ in range(H)]
+
+    comp, comps, sizes = build_components(maps, H, W)
+
+    # 재사용 배열 + 스탬프
+    seen = [[0] * W for _ in range(H)]
+    dist = [[0] * W for _ in range(H)]
+    tag = 0
 
     ans = 0
+    for cid, boundary in enumerate(comps):
+        # 컴포넌트 자체가 현재 ans를 절대 못 이기면 스킵
+        if sizes[cid] - 1 <= ans:
+            continue
+        if not boundary:  # 고립 1칸 같은 경우
+            continue
 
-    for i in range(h):
-        for j in range(w):
-            if maps[i][j] == "L":
-                ans = max(ans, bfs(maps, h, w, i, j))
+        for s in boundary:
+            far, tag = bfs_farthest_from(s, cid, maps, H, W, comp, seen, dist, tag)
+            if far > ans:
+                ans = far
 
     print(ans)
-
 
 if __name__ == "__main__":
     solution()
