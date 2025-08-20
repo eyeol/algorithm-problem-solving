@@ -1,29 +1,28 @@
 import sys
 from collections import deque
 
-input = sys.stdin.readline
-
-
 def solution():
+    input = sys.stdin.buffer.readline
     N = int(input())
-    adj = [[] for i in range(0, N + 1)]
-    for _ in range(1, N):
+    adj = [[] for _ in range(N + 1)]
+    for _ in range(N - 1):
         x, y = map(int, input().split())
         adj[x].append(y)
         adj[y].append(x)
 
-    parent = [0] * (N + 1)
-    q = deque([1])  # root
-    parent[1] = -1
+    parent = [0] * (N + 1) 
+    parent[1] = -1         
 
+    q = deque([1])
     while q:
         cur = q.popleft()
         for nxt in adj[cur]:
-            if parent[nxt] == 0:
+            if parent[nxt] == 0:  
                 parent[nxt] = cur
                 q.append(nxt)
 
-    print("\n".join(map(str, parent[2:])))
+    out = "\n".join(map(str, parent[2:]))
+    sys.stdout.write(out)
 
-
-solution()
+if __name__ == "__main__":
+    solution()
