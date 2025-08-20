@@ -2,71 +2,72 @@ import sys
 
 input = sys.stdin.readline
 
+# Given
+# 트리 입력 받음
 
-class Node:
-    def __init__(self, data, left=None, right=None):
-        self.data = data
-        self.left = left
-        self.right = right
+# Goal
+# 전위 순회
+# 중위 순회
+# 후위 순회 결과 출력
+
+# How to solve
+# 인접 리스트처럼 그래프를 정리해야하나
+# 파이썬 딕셔너리로 해보자
 
 
-def preorder_traversal(node: Node, res: str):
-    if node is None:
+def preorder(T: dict, node: str, result: list):  # 트리와 루트를 받음
+    if node == ".":
         return
-    res.append(node.data)
-    preorder_traversal(node.left, res)
-    preorder_traversal(node.right, res)
+    left, right = T[node]
+    result.append(node)
+    preorder(T, left, result)
+    preorder(T, right, result)
 
 
-def inorder_traversal(node: Node, res: str):
-    if node is None:
+def inorder(T: dict, node: str, result: list):  # 트리와 루트를 받음
+    if node == ".":
         return
-    inorder_traversal(node.left, res)
-    res.append(node.data)
-    inorder_traversal(node.right, res)
+    left, right = T[node]
+    inorder(T, left, result)
+    result.append(node)
+    inorder(T, right, result)
 
 
-def postorder_traversal(node: Node, res: str):
-    if node is None:
+def postorder(T: dict, node: str, result: list):  # 트리와 루트를 받음
+    if node == ".":
         return
-    postorder_traversal(node.left, res)
-    postorder_traversal(node.right, res)
-    res.append(node.data)
+    left, right = T[node]
+    postorder(T, left, result)
+    postorder(T, right, result)
+    result.append(node)
 
 
 def solution():
     N = int(input())
     nodes = {}
-    for _ in range(N):
-        data, left, right = map(str, input().split())
+    root, l, r = input().split()
+    nodes[root] = (l, r)
+    nodes["."] = "NIL"
+    for _ in range(N - 1):
+        p, l, r = input().split()
+        nodes[p] = [l, r]
+    # .이면 NIL
 
-        if data not in nodes:
-            nodes[data] = Node(data)
-        cur = nodes[data]
+    # pre
+    result = []
+    preorder(nodes, root, result)
+    print("".join(result))
 
-        if left != ".":
-            if left not in nodes:
-                nodes[left] = Node(left)
-            cur.left = nodes[left]
+    # in
+    result = []
+    inorder(nodes, root, result)
+    print("".join(result))
 
-        if right != ".":
-            if right not in nodes:
-                nodes[right] = Node(right)
-            cur.right = nodes[right]
-
-    root = nodes["A"]
-
-    res = []
-    preorder_traversal(root, res)
-    print("".join(res))
-
-    res = []
-    inorder_traversal(root, res)
-    print("".join(res))
-
-    res = []
-    postorder_traversal(root, res)
-    print("".join(res))
+    # post
+    result = []
+    postorder(nodes, root, result)
+    print("".join(result))
 
 
-solution()
+if __name__ == "__main__":
+    solution()
