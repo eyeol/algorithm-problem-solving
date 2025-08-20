@@ -1,18 +1,7 @@
 import sys
 
 input = sys.stdin.readline
-
-# Given
-# 트리 입력 받음
-
-# Goal
-# 전위 순회
-# 중위 순회
-# 후위 순회 결과 출력
-
-# How to solve
-# 인접 리스트처럼 그래프를 정리해야하나
-# 파이썬 딕셔너리로 해보자
+write = sys.stdout.write
 
 
 def preorder(T: dict, node: str, result: list):  # 트리와 루트를 받음
@@ -45,28 +34,27 @@ def postorder(T: dict, node: str, result: list):  # 트리와 루트를 받음
 def solution():
     N = int(input())
     nodes = {}
-    root, l, r = input().split()
-    nodes[root] = (l, r)
     nodes["."] = "NIL"
-    for _ in range(N - 1):
+
+    for _ in range(N):
         p, l, r = input().split()
         nodes[p] = [l, r]
     # .이면 NIL
 
     # pre
     result = []
-    preorder(nodes, root, result)
-    print("".join(result))
+    preorder(nodes, "A", result)
+    write("".join(result) + "\n")
 
     # in
     result = []
-    inorder(nodes, root, result)
-    print("".join(result))
+    inorder(nodes, "A", result)
+    write("".join(result) + "\n")
 
     # post
     result = []
-    postorder(nodes, root, result)
-    print("".join(result))
+    postorder(nodes, "A", result)
+    write("".join(result) + "\n")
 
 
 if __name__ == "__main__":
