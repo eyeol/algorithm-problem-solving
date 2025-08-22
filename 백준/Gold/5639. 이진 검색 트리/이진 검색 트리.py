@@ -1,49 +1,49 @@
 import sys
 
-sys.setrecursionlimit(10**6)
-input = sys.stdin.read
+def main():
+    pre = list(map(int, sys.stdin.buffer.read().split()))
+    if not pre:
+        return
+    n = len(pre)
 
-# Given
-# 이진 탐색 트리
-# 전위 순회 결과가 주어짐
-
-# Goal
-# 이 트리를 후위 순회한 결과
-
-# How to solve
-# 전위 순회 첫번째 결과가 트리 루트
-# 그 다음 트리보다 큰 값이 나올 때까지 left, 큰 값이 나오면 그 뒤는 전부 right
-# 후위 순회 결과를 출력하려면
-# left - right - root 순서
+    val = [0] * n
+    L = [-1] * n
+    R = [-1] * n
 
 
-def solution():
-    # str으로 받을 땐 strip() 붙여주는게 안전
-    pre = list(map(int, input().strip().split("\n")))
+    val[0] = pre[0]
+    stack = [0]  
 
-    lo = 0
-    hi = len(pre)  # N
+    for k in range(1, n):
+        x = pre[k]
+        val[k] = x
+        last = -1
 
-    def DivideConquer(lo, hi):
-        # 리프 노드에 도달하면 키값 출력
-        if lo >= hi:
-            return
+        while stack and x > val[stack[-1]]:
+            last = stack.pop()
+        if last != -1:
+            R[last] = k
+        else:
+            parent = stack[-1]
+            L[parent] = k
+        stack.append(k)
 
-        root = pre[lo]
-        # 어디까지가 left이고 right인지 알고 싶음
-        pivot = hi
-        for i in range(lo + 1, hi):  # 1부터 N-1
-            if pre[i] > root:
-                pivot = i
-                break
-        # left
-        DivideConquer(lo + 1, pivot)
-        # right
-        DivideConquer(pivot, hi)
-        print(root)
+    out = []
+    st = [(0, 0)]
+    while st:
+        u, state = st.pop()
+        if u == -1:
+            continue
+        if state == 0:
+            st.append((u, 1))
+            if R[u] != -1:
+                st.append((R[u], 0))
+            if L[u] != -1:
+                st.append((L[u], 0))
+        else:
+            out.append(val[u])
 
-    DivideConquer(lo, hi)
-
+    sys.stdout.write("\n".join(map(str, out)))
 
 if __name__ == "__main__":
-    solution()
+    main()
