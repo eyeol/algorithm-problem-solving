@@ -5,7 +5,6 @@ input = sys.stdin.readline
 
 def solution():
     N = int(input())
-    N += 1
     m = [[0]*10 for _ in range(N+1)] # 0은 padding
 
     # m[n][k] 부터 채우면 됨
@@ -17,7 +16,7 @@ def solution():
         for k in range(10):
             m[N-i][k] = sum(m[N-i+1][k:])
     
-    result = m[1][0] % 10007
+    result = sum(m[1][0:]) % 10007
 
     print(result)
 
