@@ -8,28 +8,25 @@ def solution():
     N = int(input())
 
     forest = [list(map(int, input().split())) for _ in range(N)]
-    # x, y는 0부터 N-1
     dx = [1, -1, 0, 0]
     dy = [0, 0, 1, -1]
 
-    # 함수 안에서 dp table을 사용해야 할 것 같은데
-    dp = [[0]*N for _ in range(N)]
+    cells = []
+    for i in range(N):
+        for j in range(N):
+            cells.append((forest[i][j], i, j))
 
-    # 새로운 시작점에 대해 함수 호출하기 전에 visited 초기화
-    def get_optimal_sol(x, y):
-        if dp[x][y]:
-            return dp[x][y]
+    cells.sort(reverse=True)
 
-        optimal = 1
-        for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
-            if 0 <= nx < N and 0 <= ny < N and forest[nx][ny] > forest[x][y]:
-                optimal = max(optimal, 1 + get_optimal_sol(nx, ny))
-        dp[x][y] = optimal
-        return optimal
+    dp = [[1]*N for _ in range(N)]
 
-    ans = max(get_optimal_sol(i, j) for i in range(N) for j in range(N))
+    for val, x, y in cells:
+        for k in range(4):
+            nx, ny = x + dx[k], y + dy[k]
+            if 0 <= nx < N and 0 <= ny < N and forest[nx][ny] < val:
+                dp[nx][ny] = max(dp[nx][ny], dp[x][y] + 1)
+    
+    ans = max(max(row) for row in dp)
 
     print(ans)
 
