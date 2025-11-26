@@ -1,3 +1,3 @@
 # Problem Solving
 
-<img src=".github/images/all.jpg" >
+<img src=".github/images/through_the_years.jpg" >
